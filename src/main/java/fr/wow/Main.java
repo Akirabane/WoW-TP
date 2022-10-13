@@ -11,14 +11,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Main {
 
     private static final Logger LOG = LogManager.getLogger();
-    private Sacoche s;
-
     public static void main(String[] args) throws IOException {
         //Game starting debug
         LOG.info("Game Launched");
@@ -34,14 +33,18 @@ public class Main {
         //instanciate the hero created by the user
         Hero hero = new Hero(name, hp);
         LOG.debug("Hero created: " + hero.getName() + " with " + hero.getHp() + " hp");
-        //instanciate épée and give it to hero
-        Epee epee = new Epee("Epee de test", 10, 1.5f, 1.5f);
-        Sacoche sacHero = new Sacoche();
-        sacHero.setEpees((List<Epee>) epee);
-        hero.setEpee(sacHero.getEpees().get(0));
-        LOG.debug("Hero has a " + hero.getEpee().getName() + " with " + hero.getEpee().getDegats() + " damages");
-        LOG.debug("total d'épées possédées par le Hero: " + sacHero.getEpees());
-        LOG.debug("Hero got a sword: " + hero.getEpee().getName() + " with " + hero.getEpee().getDegats() + " damages");
+        //create list of Epee and give them to the hero
+        LOG.debug("Creating the list of Epee...");
+        List<Epee> epees = new ArrayList<Epee>();
+        epees.add(new Epee("Epee1", 10, 1.5f, 1.5f));
+        epees.add(new Epee("Epee2", 10, 1.5f, 1.5f));
+        epees.add(new Epee("Epee3", 10, 1.5f, 1.5f));
+        LOG.debug("List of Epee created" + epees.stream().map(Epee::getName).reduce("", (a, b) -> a + " " + b));
+        hero.setEpee(epees);
+        LOG.debug("total d'épées possédées par le Hero: " + hero.getEpee().stream().map(Epee::getName).reduce("", (a, b) -> a + " " + b));
+        LOG.debug("Hero has " + hero.getEpee().stream().map(epee1 -> {
+            return epee1.getDegats();
+        }).count() + " épée(s)");
 
         //AI creates the monster randomly
         LOG.debug("Creating the monster randomly...");
@@ -73,7 +76,7 @@ public class Main {
             LOG.info("The hero starts the fight");
             LOG.info("The hero attacks the monster");
             //attacking the monster
-            monstre.setHp(monstre.getHp() - hero.getEpee().getDegats());
+            monstre.setHp(monstre.getHp() - hero.getEpee().get(0).getDegats());
             LOG.info("The monster has " + monstre.getHp() + " hp left");
             LOG.info("The monster attacks the hero");
             hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
@@ -87,7 +90,7 @@ public class Main {
             LOG.info("The hero has " + hero.getHp() + " hp left");
             LOG.info("The hero attacks the monster");
             //attacking the monster
-            monstre.setHp(monstre.getHp() - hero.getEpee().getDegats());
+            monstre.setHp(monstre.getHp() - hero.getEpee().get(0).getDegats());
             LOG.info("The monster has " + monstre.getHp() + " hp left");
         }
 
@@ -99,7 +102,7 @@ public class Main {
         while (hero.getHp() > 0 && monstre.getHp() > 0) {
             LOG.info("The hero attacks the monster");
             //attacking the monster
-            monstre.setHp(monstre.getHp() - hero.getEpee().getDegats());
+            monstre.setHp(monstre.getHp() - hero.getEpee().get(0).getDegats());
             checkHp(hero, monstre);
             if(monstre.getHp() <= 0){
                 break;

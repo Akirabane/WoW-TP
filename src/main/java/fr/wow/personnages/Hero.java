@@ -1,6 +1,9 @@
 package fr.wow.personnages;
 
 import fr.wow.items.Epee;
+import fr.wow.items.Sacoche;
+
+import java.util.List;
 
 public class Hero {
 
@@ -8,14 +11,14 @@ public class Hero {
     private int hp;
     private String name;
     private boolean isDead;
-    private Epee epee;
+    private List<Epee> epee;
+    private Sacoche sacoche = new Sacoche();
 
     // Constructor
     public Hero(String name, int hp) {
         setName(name);
         setHp(hp);
         setDead(false);
-        setEpee(epee);
     }
 
     /**
@@ -48,11 +51,11 @@ public class Hero {
         isDead = dead;
     }
 
-    public void setEpee(Epee epee) {
-        this.epee = epee;
+    public void setEpee(List<Epee> epee) {
+        sacoche.setEpees(epee);
     }
 
-    public Epee getEpee() {
-        return epee;
+    public List<Epee> getEpee() {
+        return sacoche.getEpees();
     }
 }

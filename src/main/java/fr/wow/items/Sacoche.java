@@ -2,7 +2,13 @@ package fr.wow.items;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Sacoche {
+
+    //logger
+    private static final Logger LOG = LogManager.getLogger();
 
     // Attributes
     private List<Epee> epees;
@@ -12,7 +18,6 @@ public class Sacoche {
 
     // Constructor
     public Sacoche() {
-        super();
         setEpees(epees);
         setGourdins(gourdins);
         setPommes(pommes);
@@ -29,11 +34,7 @@ public class Sacoche {
     }
 
     public void setEpees(List<Epee> epees) {
-        if(epees.size() > 3) {
-            System.out.println("Vous ne pouvez pas avoir plus de 3 épées dans votre saccoche");
-        } else {
-            this.epees = epees;
-        }
+        this.epees = epees;
     }
 
     public List<Gourdin> getGourdins() {
@@ -49,11 +50,7 @@ public class Sacoche {
     }
 
     public void setPommes(List<Pommes> pommes) {
-        if(pommes.size() > 1) {
-            System.out.println("Vous ne pouvez pas avoir plus de 1 pommes dans votre saccoche");
-        } else {
-            this.pommes = pommes;
-        }
+        this.pommes = pommes;
     }
 
     public List<Raisins> getRaisins() {
@@ -61,10 +58,6 @@ public class Sacoche {
     }
 
     public void setRaisins(List<Raisins> raisins) {
-        if (raisins.size() > 1) {
-            System.out.println("Vous ne pouvez pas avoir plus de 1 raisins dans votre saccoche");
-        } else {
-            this.raisins = raisins;
-        }
+        this.raisins = raisins;
     }
 }
