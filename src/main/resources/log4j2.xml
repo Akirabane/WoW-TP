@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configuration>
+<Configuration status="warn" strict="true">
+    <Appenders>
+        <!-- Console -->
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{dd/MM/yyyy HH:mm:ss}] - %5p - %C.%M(...) - %m %n" />
+        </Console>
+        <!--  Fichier (efface apres chaque lancement) -->
+        <File name="fichier" fileName="gameLog.log" append="false">
+            <PatternLayout pattern="[%d{dd/MM/yyyy HH:mm:ss}] - %5p - %C.%M(...) - %m %n" />
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <!-- Pour notre code -->
+        <Logger name="fr.wow" level="debug" additivity="false">
+            <AppenderRef ref="stdout" />
+            <AppenderRef ref="fichier" />
+        </Logger>
+        <!-- Pour le reste -->
+        <Root level="warn">
+            <AppenderRef ref="stdout" />
+            <AppenderRef ref="fichier" />
+        </Root>
+    </Loggers>
+
+</Configuration>
