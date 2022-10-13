@@ -2,6 +2,7 @@ package fr.wow;
 
 import fr.wow.items.Epee;
 import fr.wow.items.Gourdin;
+import fr.wow.items.Sacoche;
 import fr.wow.personnages.Hero;
 import fr.wow.personnages.Monstre;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import java.util.Random;
 public class Main {
 
     private static final Logger LOG = LogManager.getLogger();
+    private Sacoche s;
 
     public static void main(String[] args) throws IOException {
         //Game starting debug
@@ -34,7 +36,11 @@ public class Main {
         LOG.debug("Hero created: " + hero.getName() + " with " + hero.getHp() + " hp");
         //instanciate épée and give it to hero
         Epee epee = new Epee("Epee de test", 10, 1.5f, 1.5f);
-        hero.setEpee(epee);
+        Sacoche sacHero = new Sacoche();
+        sacHero.setEpees((List<Epee>) epee);
+        hero.setEpee(sacHero.getEpees().get(0));
+        LOG.debug("Hero has a " + hero.getEpee().getName() + " with " + hero.getEpee().getDegats() + " damages");
+        LOG.debug("total d'épées possédées par le Hero: " + sacHero.getEpees());
         LOG.debug("Hero got a sword: " + hero.getEpee().getName() + " with " + hero.getEpee().getDegats() + " damages");
 
         //AI creates the monster randomly
@@ -63,7 +69,7 @@ public class Main {
         Random random = new Random();
         int randomInt = random.nextInt(1000000000);
         if ((randomInt % 2) == 0) {
-            LOG.debug(randomInt + " is even");
+            LOG.debug(randomInt + " is even, hero attacks first");
             LOG.info("The hero starts the fight");
             LOG.info("The hero attacks the monster");
             //attacking the monster
@@ -118,6 +124,11 @@ public class Main {
         }
     }
 
+    /**
+     * Check if the hero or the monster is dead and set the dead boolean to true
+     * @param hero
+     * @param monstre
+     */
     private static void checkHp(Hero hero, Monstre monstre) {
         if (hero.getHp() <= 0) {
             LOG.info("The hero is dead with " + hero.getHp() + " hp left");
