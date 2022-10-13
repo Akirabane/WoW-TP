@@ -1,20 +1,22 @@
 package fr.wow.personnages;
 
+import fr.wow.items.Gourdin;
+
 public class Monstre {
 
 
     // Attributes
     private int hp;
     private String name;
-    private boolean hasArme;
     private boolean isDead;
+    private Gourdin gourdin;
 
     // Constructor
-    public Monstre(String name, int hp, boolean hasArme) {
+    public Monstre(String name, int hp) {
         setName(name);
         setHp(hp);
-        setHasArme(hasArme);
         setDead(false);
+        setGourdin(gourdin);
     }
 
     /**
@@ -39,19 +41,19 @@ public class Monstre {
         this.name = name;
     }
 
-    public boolean getHasArme() {
-        return hasArme;
-    }
-
-    public void setHasArme(boolean hasArme) {
-        this.hasArme = hasArme;
-    }
-
     public boolean getDead() {
         return isDead;
     }
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public void setGourdin(Gourdin gourdin) {
+        this.gourdin = gourdin;
+    }
+
+    public Gourdin getGourdin() {
+        return gourdin;
     }
 }

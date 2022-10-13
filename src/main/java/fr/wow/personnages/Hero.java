@@ -1,19 +1,21 @@
 package fr.wow.personnages;
 
+import fr.wow.items.Epee;
+
 public class Hero {
 
     // Attributes
     private int hp;
     private String name;
-    private boolean hasArme;
     private boolean isDead;
+    private Epee epee;
 
     // Constructor
-    public Hero(String name, int hp, boolean hasArme) {
+    public Hero(String name, int hp) {
         setName(name);
         setHp(hp);
-        setHasArme(hasArme);
         setDead(false);
+        setEpee(epee);
     }
 
     /**
@@ -38,19 +40,19 @@ public class Hero {
         this.name = name;
     }
 
-    public boolean getHasArme() {
-        return hasArme;
-    }
-
-    public void setHasArme(boolean hasArme) {
-        this.hasArme = hasArme;
-    }
-
     public boolean getDead() {
         return isDead;
     }
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public void setEpee(Epee epee) {
+        this.epee = epee;
+    }
+
+    public Epee getEpee() {
+        return epee;
     }
 }

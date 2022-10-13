@@ -1,5 +1,7 @@
 package fr.wow;
 
+import fr.wow.items.Epee;
+import fr.wow.items.Gourdin;
 import fr.wow.personnages.Hero;
 import fr.wow.personnages.Monstre;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +30,12 @@ public class Main {
         int hp = Integer.parseInt(reader.readLine());
 
         //instanciate the hero created by the user
-        Hero hero = new Hero(name, hp, false);
-        LOG.debug("Hero created: " + hero.getName() + " with " + hero.getHp() + " hp and " + hero.getHasArme() + " weapon");
+        Hero hero = new Hero(name, hp);
+        LOG.debug("Hero created: " + hero.getName() + " with " + hero.getHp() + " hp");
+        //instanciate épée and give it to hero
+        Epee epee = new Epee("Epee de test", 10, 1.5f, 1.5f);
+        hero.setEpee(epee);
+        LOG.debug("Hero got a sword: " + hero.getEpee().getName() + " with " + hero.getEpee().getDegats() + " damages");
 
         //AI creates the monster randomly
         LOG.debug("Creating the monster randomly...");
@@ -45,8 +51,11 @@ public class Main {
         }
 
         //instanciate the monster
-        Monstre monstre = new Monstre(names.get(monstreName), 25, false);
-        LOG.debug("Monster created: " + monstre.getName() + " with " + monstre.getHp() + " hp and " + monstre.getHasArme() + " weapon");
+        Monstre monstre = new Monstre(names.get(monstreName), 25);
+        LOG.debug("Monster created: " + monstre.getName() + " with " + monstre.getHp() + " hp");
+        Gourdin gourdin = new Gourdin("Gourdin de test", 10, 1.5f, 1.5f);
+        monstre.setGourdin(gourdin);
+        LOG.debug("Monster got a club: " + monstre.getGourdin().getName() + " with " + monstre.getGourdin().getDegats() + " damages");
         LOG.info("Game is ready");
         LOG.info("Let's fight!");
 
@@ -58,21 +67,21 @@ public class Main {
             LOG.info("The hero starts the fight");
             LOG.info("The hero attacks the monster");
             //attacking the monster
-            monstre.setHp(monstre.getHp() - 10);
+            monstre.setHp(monstre.getHp() - hero.getEpee().getDegats());
             LOG.info("The monster has " + monstre.getHp() + " hp left");
             LOG.info("The monster attacks the hero");
-            hero.setHp(hero.getHp() - 10);
+            hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
             LOG.info("The hero has " + hero.getHp() + " hp left");
         } else {
             LOG.debug(randomInt + " is odd");
             LOG.info("The monster starts the fight");
             LOG.info("The monster attacks the hero");
             //attacking the hero
-            hero.setHp(hero.getHp() - 10);
+            hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
             LOG.info("The hero has " + hero.getHp() + " hp left");
             LOG.info("The hero attacks the monster");
             //attacking the monster
-            monstre.setHp(monstre.getHp() - 10);
+            monstre.setHp(monstre.getHp() - hero.getEpee().getDegats());
             LOG.info("The monster has " + monstre.getHp() + " hp left");
         }
 
@@ -84,7 +93,7 @@ public class Main {
         while (hero.getHp() > 0 && monstre.getHp() > 0) {
             LOG.info("The hero attacks the monster");
             //attacking the monster
-            monstre.setHp(monstre.getHp() - 10);
+            monstre.setHp(monstre.getHp() - hero.getEpee().getDegats());
             checkHp(hero, monstre);
             if(monstre.getHp() <= 0){
                 break;
@@ -92,7 +101,7 @@ public class Main {
             LOG.info("The monster has " + monstre.getHp() + " hp left");
             LOG.info("The monster attacks the hero");
             //attacking the hero
-            hero.setHp(hero.getHp() - 10);
+            hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
             checkHp(hero, monstre);
             if(hero.getHp() <= 0){
                 break;
