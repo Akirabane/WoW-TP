@@ -2,6 +2,8 @@ package fr.wow.personnages;
 
 import fr.wow.items.Gourdin;
 
+import java.util.List;
+
 public class Monstre {
 
 
@@ -9,7 +11,7 @@ public class Monstre {
     private int hp;
     private String name;
     private boolean isDead;
-    private Gourdin gourdin;
+    private List<Gourdin> gourdin;
 
     // Constructor
     public Monstre(String name, int hp) {
@@ -49,11 +51,11 @@ public class Monstre {
         isDead = dead;
     }
 
-    public void setGourdin(Gourdin gourdin) {
+    public void setGourdin(List<Gourdin> gourdin) {
         this.gourdin = gourdin;
     }
 
-    public Gourdin getGourdin() {
+    public List<Gourdin> getGourdin() {
         return gourdin;
     }
 }

@@ -2,9 +2,9 @@ package fr.wow;
 
 import fr.wow.items.Epee;
 import fr.wow.items.Gourdin;
-import fr.wow.items.Sacoche;
 import fr.wow.personnages.Hero;
 import fr.wow.personnages.Monstre;
+import fr.wow.stuff.Sacoche;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,27 +21,28 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //Game starting debug
         LOG.info("Game Launched");
-        LOG.info("Configuring the game");
-        LOG.info("Creating teams...");
+        LOG.debug("Configuring the game");
+        LOG.debug("Creating teams...");
         //Creating the teams using user inputs
         LOG.info("Create your character : Name, HP");
         LOG.debug("Creating the hero by user inputs...");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
-        int hp = Integer.parseInt(reader.readLine());
 
         //instanciate the hero created by the user
-        Hero hero = new Hero(name, hp);
-        LOG.debug("Hero created: " + hero.getName() + " with " + hero.getHp() + " hp");
+        Hero hero = new Hero(name, 30);
+        LOG.info("Hero created: " + hero.getName() + " with " + hero.getHp() + " hp");
         //create list of Epee and give them to the hero
         LOG.debug("Creating the list of Epee...");
         List<Epee> epees = new ArrayList<Epee>();
         epees.add(new Epee("Epee1", 10, 1.5f, 1.5f));
         epees.add(new Epee("Epee2", 10, 1.5f, 1.5f));
         epees.add(new Epee("Epee3", 10, 1.5f, 1.5f));
+        Sacoche sacocheHero = new Sacoche();
+        sacocheHero.setEpees(epees);
         LOG.debug("List of Epee created" + epees.stream().map(Epee::getName).reduce("", (a, b) -> a + " " + b));
-        hero.setEpee(epees);
-        LOG.debug("total d'épées possédées par le Hero: " + hero.getEpee().stream().map(Epee::getName).reduce("", (a, b) -> a + " " + b));
+        hero.setEpee(sacocheHero.getEpees());
+        LOG.info("total d'épées possédées par le Hero: " + hero.getEpee().stream().map(Epee::getName).reduce("", (a, b) -> a + " " + b));
         LOG.debug("Hero has " + hero.getEpee().stream().map(epee1 -> {
             return epee1.getDegats();
         }).count() + " épée(s)");
@@ -62,31 +63,43 @@ public class Main {
         //instanciate the monster
         Monstre monstre = new Monstre(names.get(monstreName), 25);
         LOG.debug("Monster created: " + monstre.getName() + " with " + monstre.getHp() + " hp");
-        Gourdin gourdin = new Gourdin("Gourdin de test", 10, 1.5f, 1.5f);
-        monstre.setGourdin(gourdin);
-        LOG.debug("Monster got a club: " + monstre.getGourdin().getName() + " with " + monstre.getGourdin().getDegats() + " damages");
+        List<Gourdin> gourdins = new ArrayList<Gourdin>();
+        gourdins.add(new Gourdin("Gourdin1", 10, 1.5f, 1.5f));
+        gourdins.add(new Gourdin("Gourdin2", 10, 1.5f, 1.5f));
+        gourdins.add(new Gourdin("Gourdin3", 10, 1.5f, 1.5f));
+        Sacoche sacocheMonstre = new Sacoche();
+        sacocheMonstre.setGourdins(gourdins);
+        LOG.debug("List of Gourdin created" + gourdins.stream().map(Gourdin::getName).reduce("", (a, b) -> a + " " + b));
+        hero.setEpee(sacocheHero.getEpees());
+        monstre.setGourdin(sacocheMonstre.getGourdins());
+        LOG.info("total de gourdins possédés par le Monstre: " + monstre.getGourdin().stream().map(Gourdin::getName).reduce("", (a, b) -> a + " " + b));
+        LOG.debug("Monster has " + monstre.getGourdin().stream().map(gourdin1 -> {
+            return gourdin1.getDegats();
+        }).count() + " épée(s)");
+
+        //game starts
         LOG.info("Game is ready");
         LOG.info("Let's fight!");
 
-        //First move when games starts
+        //First move after game starts
         Random random = new Random();
         int randomInt = random.nextInt(1000000000);
         if ((randomInt % 2) == 0) {
-            LOG.debug(randomInt + " is even, hero attacks first");
+            LOG.debug(randomInt + " is even.");
             LOG.info("The hero starts the fight");
             LOG.info("The hero attacks the monster");
             //attacking the monster
             monstre.setHp(monstre.getHp() - hero.getEpee().get(0).getDegats());
             LOG.info("The monster has " + monstre.getHp() + " hp left");
             LOG.info("The monster attacks the hero");
-            hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
+            hero.setHp(hero.getHp() - monstre.getGourdin().get(0).getDegats());
             LOG.info("The hero has " + hero.getHp() + " hp left");
         } else {
             LOG.debug(randomInt + " is odd");
             LOG.info("The monster starts the fight");
             LOG.info("The monster attacks the hero");
             //attacking the hero
-            hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
+            hero.setHp(hero.getHp() - monstre.getGourdin().get(0).getDegats());
             LOG.info("The hero has " + hero.getHp() + " hp left");
             LOG.info("The hero attacks the monster");
             //attacking the monster
@@ -96,39 +109,39 @@ public class Main {
 
         //checking if the hero or monster is dead
         checkHp(hero, monstre);
-        LOG.debug("They both survived the first round");
-
-        //fight loop
-        while (hero.getHp() > 0 && monstre.getHp() > 0) {
-            LOG.info("The hero attacks the monster");
-            //attacking the monster
-            monstre.setHp(monstre.getHp() - hero.getEpee().get(0).getDegats());
-            checkHp(hero, monstre);
-            if(monstre.getHp() <= 0){
-                break;
+        //switch case to check if hero or monster is dead
+        if(hero.getHp() > 0 && monstre.getHp() > 0){
+            //fight loop
+            while (hero.getHp() > 0 && monstre.getHp() > 0) {
+                LOG.info("The hero attacks the monster");
+                //attacking the monster
+                monstre.setHp(monstre.getHp() - hero.getEpee().get(0).getDegats());
+                checkHp(hero, monstre);
+                if(monstre.getHp() <= 0){
+                    break;
+                }
+                LOG.info("The monster has " + monstre.getHp() + " hp left");
+                LOG.info("The monster attacks the hero");
+                //attacking the hero
+                hero.setHp(hero.getHp() - monstre.getGourdin().get(0).getDegats());
+                checkHp(hero, monstre);
+                if(hero.getHp() <= 0){
+                    break;
+                }
+                LOG.info("The hero has " + hero.getHp() + " hp left");
             }
-            LOG.info("The monster has " + monstre.getHp() + " hp left");
-            LOG.info("The monster attacks the hero");
-            //attacking the hero
-            hero.setHp(hero.getHp() - monstre.getGourdin().getDegats());
-            checkHp(hero, monstre);
-            if(hero.getHp() <= 0){
-                break;
+            //end of the game
+            LOG.info("The game is over");
+            if (hero.getDead()) {
+                LOG.info("The hero lost the fight");
+            } else {
+                LOG.info("The monster lost the fight");
             }
-            LOG.info("The hero has " + hero.getHp() + " hp left");
-        }
-
-        //end of the game
-        LOG.info("The game is over");
-        if (hero.getDead()) {
-            LOG.info("The hero lost the fight");
-        } else {
-            LOG.info("The monster lost the fight");
         }
     }
 
     /**
-     * Check if the hero or the monster is dead and set the dead boolean to true
+     * Check if the hero or the monster is dead and set the dead boolean parameter to true
      * @param hero
      * @param monstre
      */
@@ -136,9 +149,11 @@ public class Main {
         if (hero.getHp() <= 0) {
             LOG.info("The hero is dead with " + hero.getHp() + " hp left");
             hero.setDead(true);
+            LOG.debug("Hero is dead: " + hero.getDead());
         } else if (monstre.getHp() <= 0) {
             LOG.info("The monster is dead with " + monstre.getHp() + " hp left");
             monstre.setDead(true);
+            LOG.debug("Monster is dead: " + monstre.getDead());
         }
     }
 }
