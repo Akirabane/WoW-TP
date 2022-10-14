@@ -1,6 +1,8 @@
 package fr.wow.items;
 
-public class Gourdin {
+import fr.wow.stuff.ISacoche;
+
+public class Gourdin implements ISacoche {
 
     // Attributes
     private String name;

@@ -1,6 +1,8 @@
 package fr.wow.items;
 
-public class Epee {
+import fr.wow.stuff.ISacoche;
+
+public class Epee implements ISacoche {
 
     // Attributes
     private String name;
