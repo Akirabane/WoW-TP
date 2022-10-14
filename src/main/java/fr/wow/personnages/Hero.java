@@ -12,7 +12,7 @@ public class Hero {
     private String name;
     private boolean isDead;
     private List<Epee> epee;
-    private Sacoche s;
+    //private Sacoche s;
 
     // Constructor
     public Hero(String name, int hp) {
